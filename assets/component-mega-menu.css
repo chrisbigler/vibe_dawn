@@ -20,17 +20,6 @@
   top: 100%;
   z-index: 50;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-1.5rem);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-}
-
-.has-megamenu:hover .mega-menu__content,
-.has-megamenu:focus-within .mega-menu__content {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
 }
 
 .shopify-section-header-sticky .mega-menu__content {
@@ -39,6 +28,26 @@
 
 .header-wrapper--border-bottom .mega-menu__content {
   border-top: 0;
+}
+
+.js .mega-menu__content {
+  opacity: 0;
+  transform: translateY(-1.5rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mega-menu[open] .mega-menu__content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hide the default summary marker (arrow) */
+.mega-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.mega-menu > summary::marker {
+  display: none;
 }
 
 /* Nike-style mega menu container */
@@ -60,8 +69,6 @@
   min-width: 160px;
   padding: 0 1rem;
   transition: transform 0.2s ease;
-  opacity: 0;
-  transform: translateY(5px);
 }
 
 /* Title styling */
@@ -133,36 +140,44 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.has-megamenu:hover .mega-menu__column,
-.has-megamenu:focus-within .mega-menu__column {
+.mega-menu[open] .mega-menu__column {
   animation: fadeIn 0.3s ease forwards;
   animation-delay: calc(var(--animation-order, 0) * 0.05s);
 }
 
-.has-megamenu:hover .mega-menu__column:nth-child(1),
-.has-megamenu:focus-within .mega-menu__column:nth-child(1) { --animation-order: 1; }
-.has-megamenu:hover .mega-menu__column:nth-child(2),
-.has-megamenu:focus-within .mega-menu__column:nth-child(2) { --animation-order: 2; }
-.has-megamenu:hover .mega-menu__column:nth-child(3),
-.has-megamenu:focus-within .mega-menu__column:nth-child(3) { --animation-order: 3; }
-.has-megamenu:hover .mega-menu__column:nth-child(4),
-.has-megamenu:focus-within .mega-menu__column:nth-child(4) { --animation-order: 4; }
-.has-megamenu:hover .mega-menu__column:nth-child(5),
-.has-megamenu:focus-within .mega-menu__column:nth-child(5) { --animation-order: 5; }
-.has-megamenu:hover .mega-menu__column:nth-child(6),
-.has-megamenu:focus-within .mega-menu__column:nth-child(6) { --animation-order: 6; }
-.has-megamenu:hover .mega-menu__column:nth-child(7),
-.has-megamenu:focus-within .mega-menu__column:nth-child(7) { --animation-order: 7; }
-.has-megamenu:hover .mega-menu__column:nth-child(8),
-.has-megamenu:focus-within .mega-menu__column:nth-child(8) { --animation-order: 8; }
+.mega-menu[open] .mega-menu__column:nth-child(1) { --animation-order: 1; }
+.mega-menu[open] .mega-menu__column:nth-child(2) { --animation-order: 2; }
+.mega-menu[open] .mega-menu__column:nth-child(3) { --animation-order: 3; }
+.mega-menu[open] .mega-menu__column:nth-child(4) { --animation-order: 4; }
+.mega-menu[open] .mega-menu__column:nth-child(5) { --animation-order: 5; }
+.mega-menu[open] .mega-menu__column:nth-child(6) { --animation-order: 6; }
+.mega-menu[open] .mega-menu__column:nth-child(7) { --animation-order: 7; }
+.mega-menu[open] .mega-menu__column:nth-child(8) { --animation-order: 8; }
 
 .mega-menu__link--level-2 {
   font-weight: bold;
 }
 
-/* Add a subtle indicator for menu items with dropdowns */
-.mega-menu-trigger {
-  position: relative;
+/* Desktop hover functionality */
+@media screen and (min-width: 990px) {
+  .mega-menu:not([open]):hover .mega-menu__content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .mega-menu:not([open]):hover .mega-menu__column {
+    animation: fadeIn 0.3s ease forwards;
+    animation-delay: calc(var(--animation-order, 0) * 0.05s);
+  }
+  
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(1) { --animation-order: 1; }
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(2) { --animation-order: 2; }
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(3) { --animation-order: 3; }
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(4) { --animation-order: 4; }
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(5) { --animation-order: 5; }
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(6) { --animation-order: 6; }
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(7) { --animation-order: 7; }
+  .mega-menu:not([open]):hover .mega-menu__column:nth-child(8) { --animation-order: 8; }
 }
 
 /* Responsive adjustments */
@@ -175,18 +190,6 @@
     width: 100%;
     padding: 0;
     margin-bottom: 2rem;
-  }
-  
-  /* On mobile, we need to revert to click behavior */
-  .mega-menu__content {
-    display: none;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-  }
-  
-  .mega-menu-container.open .mega-menu__content {
-    display: block;
   }
 }
 
