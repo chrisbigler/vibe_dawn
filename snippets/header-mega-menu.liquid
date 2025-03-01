@@ -8,67 +8,65 @@
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
-      <li>
+      <li class="header__menu-item-wrapper{% if link.links != blank %} has-megamenu{% endif %}">
         {%- if link.links != blank -%}
-          <header-menu>
-            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
-              <summary
-                id="HeaderMenu-{{ link.handle }}"
-                class="header__menu-item list-menu__item link focus-inset"
+          <div class="mega-menu-container">
+            <a
+              id="HeaderMenu-{{ link.handle }}"
+              href="{{ link.url }}"
+              class="header__menu-item list-menu__item link focus-inset mega-menu-trigger"
+            >
+              <span
+                {%- if link.child_active %}
+                  class="header__active-menu-item"
+                {% endif %}
               >
-                <span
-                  {%- if link.child_active %}
-                    class="header__active-menu-item"
-                  {% endif %}
-                >
-                  {{- link.title | escape -}}
-                </span>
-                {{- 'icon-caret.svg' | inline_asset_content -}}
-              </summary>
-              <div
-                id="MegaMenu-Content-{{ forloop.index }}"
-                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
-                tabindex="-1"
-              >
-                <div class="mega-menu__container page-width">
-                  <div class="mega-menu__columns">
-                    {%- for childlink in link.links -%}
-                      <div class="mega-menu__column">
-                        <a
-                          id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
-                          href="{{ childlink.url }}"
-                          class="mega-menu__title mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
-                          {% if childlink.current %}
-                            aria-current="page"
-                          {% endif %}
-                        >
-                          {{ childlink.title | escape }}
-                        </a>
-                        {%- if childlink.links != blank -%}
-                          <ul class="mega-menu__linklist" role="list">
-                            {%- for grandchildlink in childlink.links -%}
-                              <li class="mega-menu__linklist-item">
-                                <a
-                                  id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
-                                  href="{{ grandchildlink.url }}"
-                                  class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
-                                  {% if grandchildlink.current %}
-                                    aria-current="page"
-                                  {% endif %}
-                                >
-                                  {{ grandchildlink.title | escape }}
-                                </a>
-                              </li>
-                            {%- endfor -%}
-                          </ul>
-                        {%- endif -%}
-                      </div>
-                    {%- endfor -%}
-                  </div>
+                {{- link.title | escape -}}
+              </span>
+            </a>
+            <div
+              id="MegaMenu-Content-{{ forloop.index }}"
+              class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+              tabindex="-1"
+            >
+              <div class="mega-menu__container page-width">
+                <div class="mega-menu__columns">
+                  {%- for childlink in link.links -%}
+                    <div class="mega-menu__column">
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="mega-menu__title mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="mega-menu__linklist" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li class="mega-menu__linklist-item">
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
                 </div>
               </div>
-            </details>
-          </header-menu>
+            </div>
+          </div>
         {%- else -%}
           <a
             id="HeaderMenu-{{ link.handle }}"
@@ -91,3 +89,37 @@
     {%- endfor -%}
   </ul>
 </nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu functionality
+    const mediaQuery = window.matchMedia('(max-width: 989px)');
+    
+    function handleMobileMenu(e) {
+      if (e.matches) {
+        // Mobile view - add click handlers
+        document.querySelectorAll('.mega-menu-trigger').forEach(trigger => {
+          trigger.addEventListener('click', function(event) {
+            // Only prevent default if we're in mobile view
+            if (window.innerWidth <= 989) {
+              event.preventDefault();
+              const container = this.closest('.mega-menu-container');
+              container.classList.toggle('open');
+            }
+          });
+        });
+      } else {
+        // Desktop view - remove click handlers and classes
+        document.querySelectorAll('.mega-menu-container').forEach(container => {
+          container.classList.remove('open');
+        });
+      }
+    }
+    
+    // Initial check
+    handleMobileMenu(mediaQuery);
+    
+    // Add listener for screen size changes
+    mediaQuery.addEventListener('change', handleMobileMenu);
+  });
+</script>
