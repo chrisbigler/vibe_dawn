@@ -14,6 +14,8 @@
   position: absolute;
   right: 0;
   top: 100%;
+  z-index: 50;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .shopify-section-header-sticky .mega-menu__content {
@@ -27,6 +29,7 @@
 .js .mega-menu__content {
   opacity: 0;
   transform: translateY(-1.5rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .mega-menu[open] .mega-menu__content {
@@ -34,54 +37,130 @@
   transform: translateY(0);
 }
 
-.mega-menu__list {
-  display: grid;
-  gap: 1.8rem 4rem;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+/* Nike-style mega menu container */
+.mega-menu__container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Columns layout */
+.mega-menu__columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.mega-menu__column {
+  flex: 1;
+  min-width: 160px;
+  padding: 0 1rem;
+  transition: transform 0.2s ease;
+}
+
+/* Title styling */
+.mega-menu__title {
+  display: block;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+/* Nike-style underline animation for titles */
+.mega-menu__title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: rgb(var(--color-foreground));
+  transition: width 0.3s ease;
+}
+
+.mega-menu__title:hover::after,
+.mega-menu__title:focus::after {
+  width: 100%;
+}
+
+/* Link list styling */
+.mega-menu__linklist {
   list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mega-menu__linklist-item {
+  margin-bottom: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.mega-menu__linklist-item:hover {
+  transform: translateX(3px);
 }
 
 .mega-menu__link {
   color: rgba(var(--color-foreground), 0.75);
   display: block;
   line-height: calc(1 + 0.3 / var(--font-body-scale));
-  padding-bottom: 0.6rem;
-  padding-top: 0.6rem;
   text-decoration: none;
-  transition: text-decoration var(--duration-short) ease;
-  word-wrap: break-word;
-}
-
-.mega-menu__link--level-2 {
-  font-weight: bold;
-}
-
-.header--top-center .mega-menu__list {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  column-gap: 0;
-}
-
-.header--top-center .mega-menu__list > li {
-  width: 16%;
-  padding-right: 2.4rem;
+  transition: color var(--duration-short) ease;
+  font-size: 0.95rem;
+  position: relative;
 }
 
 .mega-menu__link:hover,
 .mega-menu__link--active {
   color: rgb(var(--color-foreground));
-  text-decoration: underline;
+  text-decoration: none;
 }
 
-.mega-menu__link--active:hover {
-  text-decoration-thickness: 0.2rem;
+/* Subtle fade-in animation for menu items */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.mega-menu .mega-menu__list--condensed {
-  display: block;
+.mega-menu[open] .mega-menu__column {
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: calc(var(--animation-order, 0) * 0.05s);
 }
 
-.mega-menu__list--condensed .mega-menu__link {
-  font-weight: normal;
+.mega-menu[open] .mega-menu__column:nth-child(1) { --animation-order: 1; }
+.mega-menu[open] .mega-menu__column:nth-child(2) { --animation-order: 2; }
+.mega-menu[open] .mega-menu__column:nth-child(3) { --animation-order: 3; }
+.mega-menu[open] .mega-menu__column:nth-child(4) { --animation-order: 4; }
+.mega-menu[open] .mega-menu__column:nth-child(5) { --animation-order: 5; }
+.mega-menu[open] .mega-menu__column:nth-child(6) { --animation-order: 6; }
+.mega-menu[open] .mega-menu__column:nth-child(7) { --animation-order: 7; }
+.mega-menu[open] .mega-menu__column:nth-child(8) { --animation-order: 8; }
+
+.mega-menu__link--level-2 {
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 989px) {
+  .mega-menu__columns {
+    flex-direction: column;
+  }
+  
+  .mega-menu__column {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+}
+
+/* For smaller screens, maintain a clean layout */
+@media screen and (max-width: 749px) {
+  .mega-menu__content {
+    padding: 2rem 1.5rem;
+  }
 }
